@@ -39,13 +39,13 @@ def check_disk_usage():
 def create_rapport(cpu_usage, ram_usage, disk_usage, ports_open):
     data = {"id":str(uuid.uuid4()),"time":time.strftime("%d/%m/%Y %H:%M:%S"),"data":{"cpu":cpu_usage,"ram":ram_usage,"disk":disk_usage,"ports":ports_open}}
     json_data = json.dumps(data)
-    with open(f"var/monit/{data["id"]}.json", "w") as f:
+    with open(f"/var/monit/{data["id"]}.json", "w") as f:
         f.write(json_data)
         logging.info(f"Report created with id {data["id"]}")
 
 
 def create_rapport_file(id:str):
-    os.mkdir("var/monit/"+id)
+    os.mkdir("/var/monit/"+id)
 
 
 def check(config):
@@ -60,33 +60,33 @@ def check(config):
     create_rapport(cpu, ram, disk, port_for_json)
 
 def get_config():
-    with open("etc/monit/conf.d/conf.json", "r") as f:
+    with open("/etc/monit/conf.d/conf.json", "r") as f:
         config = json.load(f)
     return config
 
 def get_last_rapport():
     last=None
-    for file in os.listdir("var/monit"):
+    for file in os.listdir("/var/monit"):
         if last is None:
             last = file
-        elif os.path.getmtime(f"{"var/monit"}/{file}") > os.path.getmtime(f"{"var/monit"}/{last}"):
+        elif os.path.getmtime(f"{"/var/monit"}/{file}") > os.path.getmtime(f"{"/var/monit"}/{last}"):
             last = file
-    with open(f"{"var/monit"}/{last}", "r") as f:
+    with open(f"{"/var/monit"}/{last}", "r") as f:
         content = json.load(f)
         logging.info(f"Get last report:{content["id"]}")
         return content
 
 def get_all_reports():
     rapport_list=[]
-    for file in os.listdir("var/monit/"):
-        with open(f"var/monit//{file}", "r") as f:
+    for file in os.listdir("/var/monit/"):
+        with open(f"/var/monit/{file}", "r") as f:
             rapport_list.append(json.load(f))
     logging.info(f"Get all reports")
     return rapport_list
 
 def get_report(name):
-    if os.path.exists(f"var/monit/{name}"):
-        with open(f"var/monit/{name}", "r") as f:
+    if os.path.exists(f"/var/monit/{name}"):
+        with open(f"/var/monit/{name}", "r") as f:
             return json.load(f)
     else:
         print("File not found")
@@ -94,8 +94,8 @@ def get_report(name):
 
 def get_rapports_younger_than(hours):
     rep=[]
-    for file in os.listdir("var/monit/"):
-        if time.time() - os.path.getmtime(f"var/monit/{file}") < hours*60*60:
+    for file in os.listdir("/var/monit/"):
+        if time.time() - os.path.getmtime(f"/var/monit/{file}") < hours*60*60:
             rep.append(file)
     return rep    
 
@@ -120,15 +120,15 @@ def get_avg_of_report(hours):
     
 
 def log_config():
-    logging.basicConfig(filename='var/log/monit/monit.log', encoding='utf-8', level=logging.DEBUG)
+    logging.basicConfig(filename='/var/log/monit/monit.log', encoding='utf-8', level=logging.DEBUG)
 
 def check_init():
-    if not os.path.exists("var/monit"):
-        print("var/monit not found \nPlease run init.sh")
-    if not os.path.exists("var/log/monit"): 
-        print("var/log/monit not found \nPlease run init.sh")
-    if not os.path.exists("etc/monit/conf.d"):
-        print("etc/monit/conf.d not found \nPlease run init.sh")
+    if not os.path.exists("/var/monit"):
+        print("/var/monit not found \nPlease run init.sh")
+    if not os.path.exists("/var/log/monit"): 
+        print("/var/log/monit not found \nPlease run init.sh")
+    if not os.path.exists("/etc/monit/conf.d"):
+        print("/etc/monit/conf.d not found \nPlease run init.sh")
         return False
     else:
         return True
