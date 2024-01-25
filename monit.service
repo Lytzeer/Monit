@@ -1,0 +1,6 @@
+[Unit]
+Description=Get some informations on your machine
+
+[Service]
+type=oneshot
+ExecStart=/usr/bin/python3 /var/monit/monit.py
