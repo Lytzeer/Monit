@@ -1,5 +1,6 @@
 from flask import Flask, jsonify, request
-from monit import get_report, get_all_reports, get_avg_of_report, get_rapports_younger_than, get_last_rapport
+from monit import get_report, get_all_reports, get_avg_of_report, get_last_rapport
+import json
 
 app = Flask(__name__)
 
@@ -21,4 +22,6 @@ def last():
 
 
 if __name__ == "__main__":
-    app.run(host="127.0.0.1", port=8080, debug=True)
+    with open("/etc/monit/conf.d/api_conf.json", "r") as f:
+        config = json.load(f)
+    app.run(host=config["host"], port=config["port"], debug=True)
