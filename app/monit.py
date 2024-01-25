@@ -69,9 +69,9 @@ def get_last_rapport():
     for file in os.listdir("/var/monit"):
         if last is None:
             last = file
-        elif os.path.getmtime(f"{'/var/monit'}/{file}") > os.path.getmtime(f"{"/var/monit"}/{last}"):
+        elif os.path.getmtime(f"/var/monit/{file}") > os.path.getmtime(f"/var/monit/{last}"):
             last = file
-    with open(f"{"/var/monit"}/{last}", "r") as f:
+    with open(f"/var/monit/{last}", "r") as f:
         content = json.load(f)
         logging.info(f"Get last report:{content['id']}")
         return content
