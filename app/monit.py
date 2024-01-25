@@ -39,7 +39,7 @@ def check_disk_usage():
 def create_rapport(cpu_usage, ram_usage, disk_usage, ports_open):
     data = {"id":str(uuid.uuid4()),"time":time.strftime("%d/%m/%Y %H:%M:%S"),"data":{"cpu":cpu_usage,"ram":ram_usage,"disk":disk_usage,"ports":ports_open}}
     json_data = json.dumps(data)
-    with open(f"/var/monit/{data["id"]}.json", "w") as f:
+    with open(f'/var/monit/{data["id"]}.json', "w") as f:
         f.write(json_data)
         logging.info(f"Report created with id {data["id"]}")
 
