@@ -16,3 +16,4 @@ chown -R monit:monit /etc/monit/conf.d
 chown -R monit:monit /var/monit
 cp ./conf/conf.json /etc/monit/conf.d/
 cp ./conf/api_conf.json /etc/monit/conf.d/
+cp ./app /home/monit/
