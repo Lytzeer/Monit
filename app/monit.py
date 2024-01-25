@@ -41,7 +41,7 @@ def create_rapport(cpu_usage, ram_usage, disk_usage, ports_open):
     json_data = json.dumps(data)
     with open(f"/var/monit/{data['id']}.json", "w") as f:
         f.write(json_data)
-        logging.info(f"Report created with id {data["id"]}")
+        logging.info(f"Report created with id {data['id']}")
 
 
 def create_rapport_file(id:str):
@@ -69,11 +69,11 @@ def get_last_rapport():
     for file in os.listdir("/var/monit"):
         if last is None:
             last = file
-        elif os.path.getmtime(f"{"/var/monit"}/{file}") > os.path.getmtime(f"{"/var/monit"}/{last}"):
+        elif os.path.getmtime(f"{'/var/monit'}/{file}") > os.path.getmtime(f"{"/var/monit"}/{last}"):
             last = file
     with open(f"{"/var/monit"}/{last}", "r") as f:
         content = json.load(f)
-        logging.info(f"Get last report:{content["id"]}")
+        logging.info(f"Get last report:{content['id']}")
         return content
 
 def get_all_reports():
