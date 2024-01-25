@@ -4,11 +4,17 @@ if [ "$EUID" -ne 0 ]
     then echo "Veuillez lancer init en tant que root"
     exit
 fi
-useradd monit -m -s /bin/sh -u 2000
+dnf install -y python3 python3-pip
+pip install -r ./requirement.txt
+useradd monit -s /bin/sh -u 2000
 groupadd monit
 usermod -aG monit monit
 pip install -r ./requirement.txt
 mkdir -p /etc/monit/conf.d /var/monit /var/log/monit
 cp ./conf/conf.json ./conf/api_conf.json /etc/monit/conf.d/
-cp ./app/api.py ./app/monit.py /home/monit/
-chown -R monit:monit /etc/monit/conf.d /var/monit /var/log/monit /home/monit
+cp ./app/api.py ./app/monit.py /var/monit/
+cp ./monit.service ./monit.timer /etc/systemd/system/
+chown -R monit:monit /etc/monit/conf.d /var/monit /var/log/monit
+systemctl daemon-reload
+systemctl enable monit.timer
+systemctl start monit.timer
