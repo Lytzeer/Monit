@@ -143,18 +143,16 @@ if __name__ == "__main__":
     args = parser.parse_args()
     log_config()
 
-    match args.command:
-        case "check":
-            check(get_config())
-        case "list":
-            print(get_all_reports())
-        case "get":
-            match args.parameter[0]:
-                case "last":
-                    print(get_last_rapport())
-                case "avg":
-                    print(get_avg_of_report(int(args.parameter[1])))
-                case _:
-                    print(get_report(args.parameter[0]))
-        case _:
-            print("Commande inconnue")
+    if args.command == "check":
+        check(get_config())
+    elif args.command == "list":
+        print(get_all_reports())
+    elif args.command == "get":
+        if args.parameter[0] == "last":
+            print(get_last_rapport())
+        elif args.parameter[0] == "avg":
+            print(get_avg_of_report(int(args.parameter[1])))
+        else:
+            print(get_report(args.parameter[0]))
+    else:
+        print("Commande inconnue")
