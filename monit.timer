@@ -2,8 +2,7 @@
 Description=Timer for monitor check
 
 [Timer]
-OnBootSec=10s
-OnUnitActiveSec=10s
+OnCalendar=*:0/1
 
 [Install]
 WantedBy=timers.target
