@@ -91,6 +91,7 @@ def get_config():
 def get_last_rapport():
     """Get the last rapport"""
     last = None
+    report={}
     for file in listdir("/var/monit"):
         if file.endswith(".json"):
             if last is None:
@@ -101,8 +102,9 @@ def get_last_rapport():
                 last = file
     with open(f"/var/monit/{last}", "r", encoding="utf-8") as f:
         content = json.load(f)
+        report[content["id"]]=content["data"]
         info(f"Get last report:{content['id']}")
-        return content
+        return report
 
 
 def get_all_reports():
@@ -119,11 +121,14 @@ def get_all_reports():
 
 def get_report(name):
     """Get a report"""
+    report={}
     if not name.endswith(".json"):
         name += ".json"
     if path.exists(f"/var/monit/{name}"):
         with open(f"/var/monit/{name}", "r", encoding="utf-8") as f:
-            return json.load(f)
+            report_data=json.load(f)
+            report[report_data["id"]]=report_data["data"]
+            return report
     else:
         print("File not found")
         return None
