@@ -119,6 +119,8 @@ def get_all_reports():
 
 def get_report(name):
     """Get a report"""
+    if not name.endswith(".json"):
+        name += ".json"
     if path.exists(f"/var/monit/{name}"):
         with open(f"/var/monit/{name}", "r", encoding="utf-8") as f:
             return json.load(f)
