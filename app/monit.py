@@ -96,7 +96,7 @@ def get_report(name):
 def get_rapports_younger_than(hours):
     rep=[]
     for file in os.listdir("/var/monit/"):
-        if time.time() - os.path.getmtime(f"/var/monit/{file}") < hours*60*60:
+        if time.time() - os.path.getmtime(f"/var/monit/{file}") < hours*60*60 and file.endswith(".json"):
             rep.append(file)
     return rep    
 
