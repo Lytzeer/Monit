@@ -107,11 +107,12 @@ def get_last_rapport():
 
 def get_all_reports():
     """Get all reports"""
-    rapport_list = []
+    rapport_list = {}
     for file in listdir("/var/monit/"):
         if file.endswith(".json"):
             with open(f"/var/monit/{file}", "r", encoding="utf-8") as f:
-                rapport_list.append(json.load(f))
+                report = json.load(f)
+                rapport_list[report["id"]] = report
     info("Get all reports")
     return rapport_list
 
