@@ -79,8 +79,9 @@ def get_last_rapport():
 def get_all_reports():
     rapport_list=[]
     for file in os.listdir("/var/monit/"):
-        with open(f"/var/monit/{file}", "r") as f:
-            rapport_list.append(json.load(f))
+        if file.endswith(".json"):
+            with open(f"/var/monit/{file}", "r") as f:
+                rapport_list.append(json.load(f))
     logging.info(f"Get all reports")
     return rapport_list
 
