@@ -49,8 +49,8 @@ def create_rapport(cpu_usage, ram_usage, disk_usage, ports_open):
     """Create a rapport file"""
     data = {
         "id": str(uuid4()),
-        "time": time.strftime("%d/%m/%Y %H:%M:%S"),
         "data": {
+            "time": time.strftime("%d/%m/%Y %H:%M:%S"),
             "cpu": cpu_usage,
             "ram": ram_usage,
             "disk": disk_usage,
