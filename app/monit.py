@@ -58,7 +58,7 @@ def create_rapport(cpu_usage, ram_usage, disk_usage, ports_open):
         },
     }
     json_data = json.dumps(data)
-    with open(f"/var/monit/{data['id']}.json", "w", encoding='utf-8') as f:
+    with open(f"/var/monit/{data['id']}.json", "w", encoding="utf-8") as f:
         f.write(json_data)
         info(f"Report created with id {data['id']}")
 
@@ -83,7 +83,7 @@ def check(config):
 
 def get_config():
     """Get the config file"""
-    with open("/etc/monit/conf.d/conf.json", "r", encoding='utf-8') as f:
+    with open("/etc/monit/conf.d/conf.json", "r", encoding="utf-8") as f:
         config = json.load(f)
     return config
 
@@ -92,11 +92,14 @@ def get_last_rapport():
     """Get the last rapport"""
     last = None
     for file in listdir("/var/monit"):
-        if last is None:
-            last = file
-        elif path.getmtime(f"/var/monit/{file}") > path.getmtime(f"/var/monit/{last}"):
-            last = file
-    with open(f"/var/monit/{last}", "r", encoding='utf-8') as f:
+        if file.endswith(".json"):
+            if last is None:
+                last = file
+            elif path.getmtime(f"/var/monit/{file}") > path.getmtime(
+                f"/var/monit/{last}"
+            ):
+                last = file
+    with open(f"/var/monit/{last}", "r", encoding="utf-8") as f:
         content = json.load(f)
         info(f"Get last report:{content['id']}")
         return content
@@ -107,7 +110,7 @@ def get_all_reports():
     rapport_list = []
     for file in listdir("/var/monit/"):
         if file.endswith(".json"):
-            with open(f"/var/monit/{file}", "r", encoding='utf-8') as f:
+            with open(f"/var/monit/{file}", "r", encoding="utf-8") as f:
                 rapport_list.append(json.load(f))
     info("Get all reports")
     return rapport_list
@@ -116,7 +119,7 @@ def get_all_reports():
 def get_report(name):
     """Get a report"""
     if path.exists(f"/var/monit/{name}"):
-        with open(f"/var/monit/{name}", "r", encoding='utf-8') as f:
+        with open(f"/var/monit/{name}", "r", encoding="utf-8") as f:
             return json.load(f)
     else:
         print("File not found")
