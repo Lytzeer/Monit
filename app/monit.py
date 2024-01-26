@@ -11,7 +11,7 @@ import time
 from os import path, listdir, mkdir
 from logging import info, basicConfig, DEBUG
 import sys
-from discord_webhook import DiscordWebhook, DiscordEmbed
+from discord_alerts import ram_alert, cpu_alert, disk_alert, ram_alert_critical, cpu_alert_critical, disk_alert_critical
 import psutil
 
 
