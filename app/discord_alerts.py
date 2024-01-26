@@ -29,7 +29,7 @@ def ram_alert(usage):
 
 def cpu_alert(usage):
     """Send a Discord alert when the CPU is overloaded"""
-    with open("conf/alerts.json", "r", encoding="utf-8") as json_file:
+    with open("/etc/monit/conf.d/alerts.json", "r", encoding="utf-8") as json_file:
         data = json.load(json_file)["cpu"]
     webhook_url = data["webhook"]
     webhook = DiscordWebhook(url=webhook_url)
@@ -52,7 +52,7 @@ def cpu_alert(usage):
 
 def disk_alert(usage):
     """Send a Discord alert when the Disk is overloaded"""
-    with open("conf/alerts.json", "r", encoding="utf-8") as json_file:
+    with open("/etc/monit/conf.d/alerts.json", "r", encoding="utf-8") as json_file:
         data = json.load(json_file)["disk"]
     webhook_url = data["webhook"]
     webhook = DiscordWebhook(url=webhook_url)
@@ -75,7 +75,7 @@ def disk_alert(usage):
 
 def ram_alert_critical(usage):
     """Send a critical Discord alert when the RAM is overloaded"""
-    with open("conf/alerts.json", "r", encoding="utf-8") as json_file:
+    with open("/etc/monit/conf.d/alerts.json", "r", encoding="utf-8") as json_file:
         data = json.load(json_file)["ram"]
     webhook_url = data["webhook"]
     webhook = DiscordWebhook(url=webhook_url)
@@ -98,7 +98,7 @@ def ram_alert_critical(usage):
 
 def cpu_alert_critical(usage):
     """Send a critical Discord alert when the CPU is overloaded"""
-    with open("conf/alerts.json", "r", encoding="utf-8") as json_file:
+    with open("/etc/monit/conf.d/alerts.json", "r", encoding="utf-8") as json_file:
         data = json.load(json_file)["cpu"]
     webhook_url = data["webhook"]
     webhook = DiscordWebhook(url=webhook_url)
@@ -121,7 +121,7 @@ def cpu_alert_critical(usage):
 
 def disk_alert_critical(usage):
     """Send a critical Discord alert when the Disk is overloaded"""
-    with open("conf/alerts.json", "r", encoding="utf-8") as json_file:
+    with open("/etc/monit/conf.d/alerts.json", "r", encoding="utf-8") as json_file:
         data = json.load(json_file)["disk"]
     webhook_url = data["webhook"]
     webhook = DiscordWebhook(url=webhook_url)
