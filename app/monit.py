@@ -112,7 +112,7 @@ def get_all_reports():
         if file.endswith(".json"):
             with open(f"/var/monit/{file}", "r", encoding="utf-8") as f:
                 report = json.load(f)
-                rapport_list[report["id"]] = report
+                rapport_list[report["id"]] = report["data"]
     info("Get all reports")
     return rapport_list
 
