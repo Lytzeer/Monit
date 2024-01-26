@@ -14,7 +14,7 @@ def reports():
     return jsonify(get_all_reports()), 200
 
 
-@app.route("/reports/<id>", methods=["GET"])
+@app.route("/reports/<report_id>", methods=["GET"])
 def report(report_id):
     """Report route"""
     return jsonify(get_report(report_id)), 200
