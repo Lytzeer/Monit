@@ -28,8 +28,7 @@ def check_ram_usage():
     """Check the ram usage"""
     usage = psutil.virtual_memory().percent
     print(f"RAM Usage: {usage}%")
-    if 50.0 < usage < 80.0:
-        discord_alerts.ram_alert(usage)
+    discord_alerts.ram_alert(usage)
     return usage
 
 
