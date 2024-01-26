@@ -12,7 +12,7 @@ usermod -aG monit monit
 pip install -r ./requirement.txt
 mkdir -p /etc/monit/conf.d /var/monit /var/log/monit
 cp ./conf/conf.json ./conf/api_conf.json ./conf/alerts.json /etc/monit/conf.d/
-cp ./app/api.py ./app/monit.py /var/monit/
+cp ./app/api.py ./app/monit.py ./app/discord_alerts.py /var/monit/
 cp ./monit.service ./monit.timer /etc/systemd/system/
 chown -R monit:monit /etc/monit/conf.d /var/monit /var/log/monit /etc/systemd/system/monit.*
 systemctl daemon-reload
