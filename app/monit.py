@@ -47,7 +47,7 @@ def check_disk_usage():
     """Check the disk usage"""
     usage = psutil.disk_usage("/")[3]
     print(f"Disk Usage: {usage}%")
-    if 50 < usage < 80:
+    if 10 < usage < 80:
         discord_alerts.disk_alert(usage)
     return usage
 
