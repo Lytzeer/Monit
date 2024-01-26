@@ -11,7 +11,7 @@ import time
 from os import path, listdir, mkdir
 from logging import info, basicConfig, DEBUG
 import sys
-import discord_alerts
+from discord_alerts import cpu_alert_critical, cpu_alert, ram_alert_critical, ram_alert, disk_alert_critical, disk_alert
 import psutil
 
 
@@ -20,7 +20,7 @@ def check_cpu_usage():
     usage = psutil.cpu_percent(1)
     print(f"CPU Usage: {usage}%")
     if 50.0 < usage < 80.0:
-        discord_alerts.cpu_alert(usage)
+        cpu_alert(usage)
     return usage
 
 
@@ -28,7 +28,9 @@ def check_ram_usage():
     """Check the ram usage"""
     usage = psutil.virtual_memory().percent
     print(f"RAM Usage: {usage}%")
-    discord_alerts.ram_alert(usage)
+    if 50.0 < usage < 80.0:
+        ram_alert(usage)
+        print("Alert sent")
     return usage
 
 
@@ -47,7 +49,8 @@ def check_disk_usage():
     usage = psutil.disk_usage("/")[3]
     print(f"Disk Usage: {usage}%")
     if 10.0 < usage < 80.0:
-        discord_alerts.disk_alert(usage)
+        disk_alert(usage)
+        print("Alert sent")
     return usage
 
 
