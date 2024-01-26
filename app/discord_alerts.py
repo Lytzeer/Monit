@@ -6,7 +6,7 @@ from discord_webhook import DiscordWebhook, DiscordEmbed
 
 def ram_alert(usage):
     """Send a Discord alert when the RAM is overloaded"""
-    with open("conf/alerts.json", "r", encoding="utf-8") as json_file:
+    with open("/etc/monit/conf.d/alerts.json", "r", encoding="utf-8") as json_file:
         data = json.load(json_file)["ram"]
     webhook_url = data["webhook"]
     webhook = DiscordWebhook(url=webhook_url)
