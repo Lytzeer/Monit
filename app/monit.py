@@ -1,110 +1,145 @@
+"""Monit module
+Monit is a monitoring tool for linux machines
+"""
+
 import argparse
-import psutil
 import socket
 from contextlib import closing
 import json
-import uuid
+from uuid import uuid4
 import time
-import os
-import logging
+from os import path, listdir, mkdir
+from logging import info, basicConfig, DEBUG
+import sys
+import psutil
+
 
 def check_cpu_usage():
+    """Check the cpu usage"""
     usage = psutil.cpu_percent(1)
     print(f"CPU Usage: {usage}%")
     return usage
 
 
 def check_ram_usage():
+    """Check the ram usage"""
     usage = psutil.virtual_memory().percent
     print(f"RAM Usage: {usage}%")
     return usage
 
 
 def check_ports_open(host, port):
+    """Check if a port is open"""
     with closing(socket.socket(socket.AF_INET, socket.SOCK_STREAM)) as sock:
         if sock.connect_ex((host, port)) == 0:
             print(f"Port {port} is open")
             return True
-        else:
-            print(f"Port {port} is closed")
-            return False
+        print(f"Port {port} is closed")
+        return False
 
 
 def check_disk_usage():
+    """Check the disk usage"""
     usage = psutil.disk_usage("/")[3]
     print(f"Disk Usage: {usage}%")
     return usage
 
 
 def create_rapport(cpu_usage, ram_usage, disk_usage, ports_open):
-    data = {"id":str(uuid.uuid4()),"time":time.strftime("%d/%m/%Y %H:%M:%S"),"data":{"cpu":cpu_usage,"ram":ram_usage,"disk":disk_usage,"ports":ports_open}}
+    """Create a rapport file"""
+    data = {
+        "id": str(uuid4()),
+        "time": time.strftime("%d/%m/%Y %H:%M:%S"),
+        "data": {
+            "cpu": cpu_usage,
+            "ram": ram_usage,
+            "disk": disk_usage,
+            "ports": ports_open,
+        },
+    }
     json_data = json.dumps(data)
-    with open(f"/var/monit/{data['id']}.json", "w") as f:
+    with open(f"/var/monit/{data['id']}.json", "w", encoding='utf-8') as f:
         f.write(json_data)
-        logging.info(f"Report created with id {data['id']}")
+        info(f"Report created with id {data['id']}")
 
 
-def create_rapport_file(id:str):
-    os.mkdir("/var/monit/"+id)
+def create_rapport_file(report_id: str):
+    """Create a rapport file"""
+    mkdir("/var/monit/" + report_id)
 
 
 def check(config):
+    """Check the machine"""
     host_ip = config["host"]
     ports = config["ports"]
-    cpu=check_cpu_usage()
-    ram=check_ram_usage()
-    port_for_json={}
+    cpu = check_cpu_usage()
+    ram = check_ram_usage()
+    port_for_json = {}
     for p in ports:
-        port_for_json[p]=check_ports_open(host_ip, p)
-    disk=check_disk_usage()
+        port_for_json[p] = check_ports_open(host_ip, p)
+    disk = check_disk_usage()
     create_rapport(cpu, ram, disk, port_for_json)
 
+
 def get_config():
-    with open("/etc/monit/conf.d/conf.json", "r") as f:
+    """Get the config file"""
+    with open("/etc/monit/conf.d/conf.json", "r", encoding='utf-8') as f:
         config = json.load(f)
     return config
 
+
 def get_last_rapport():
-    last=None
-    for file in os.listdir("/var/monit"):
+    """Get the last rapport"""
+    last = None
+    for file in listdir("/var/monit"):
         if last is None:
             last = file
-        elif os.path.getmtime(f"/var/monit/{file}") > os.path.getmtime(f"/var/monit/{last}"):
+        elif path.getmtime(f"/var/monit/{file}") > path.getmtime(f"/var/monit/{last}"):
             last = file
-    with open(f"/var/monit/{last}", "r") as f:
+    with open(f"/var/monit/{last}", "r", encoding='utf-8') as f:
         content = json.load(f)
-        logging.info(f"Get last report:{content['id']}")
+        info(f"Get last report:{content['id']}")
         return content
 
+
 def get_all_reports():
-    rapport_list=[]
-    for file in os.listdir("/var/monit/"):
+    """Get all reports"""
+    rapport_list = []
+    for file in listdir("/var/monit/"):
         if file.endswith(".json"):
-            with open(f"/var/monit/{file}", "r") as f:
+            with open(f"/var/monit/{file}", "r", encoding='utf-8') as f:
                 rapport_list.append(json.load(f))
-    logging.info(f"Get all reports")
+    info("Get all reports")
     return rapport_list
 
+
 def get_report(name):
-    if os.path.exists(f"/var/monit/{name}"):
-        with open(f"/var/monit/{name}", "r") as f:
+    """Get a report"""
+    if path.exists(f"/var/monit/{name}"):
+        with open(f"/var/monit/{name}", "r", encoding='utf-8') as f:
             return json.load(f)
     else:
         print("File not found")
         return None
 
+
 def get_rapports_younger_than(hours):
-    rep=[]
-    for file in os.listdir("/var/monit/"):
-        if time.time() - os.path.getmtime(f"/var/monit/{file}") < hours*60*60 and file.endswith(".json"):
+    """Get all reports younger than x hours"""
+    rep = []
+    for file in listdir("/var/monit/"):
+        if time.time() - path.getmtime(
+            f"/var/monit/{file}"
+        ) < hours * 60 * 60 and file.endswith(".json"):
             rep.append(file)
-    return rep    
+    return rep
+
 
 def get_avg_of_report(hours):
-    rapports=get_rapports_younger_than(hours)
-    rep=None
+    """Get the average of reports younger than x hours"""
+    rapports = get_rapports_younger_than(hours)
+    rep = None
     for rapport in rapports:
-        r=get_report(rapport)
+        r = get_report(rapport)
         if rep is None:
             rep = r
         else:
@@ -113,34 +148,39 @@ def get_avg_of_report(hours):
     if rep is not None:
         rep["data"]["cpu"] /= len(rapports)
         rep["data"]["ram"] /= len(rapports)
-        json_data = {"cpu":rep["data"]["cpu"],"ram":rep["data"]["ram"]}
-        logging.info(f"Get avg of reports younger than {hours} hours")
+        json_data = {"cpu": rep["data"]["cpu"], "ram": rep["data"]["ram"]}
+        info(f"Get avg of reports younger than {hours} hours")
         return json_data
-    else:
-        return None
-    
+    return None
+
 
 def log_config():
-    logging.basicConfig(filename='/var/log/monit/monit.log', encoding='utf-8', level=logging.DEBUG)
+    """Config the logger"""
+    basicConfig(filename="/var/log/monit/monit.log", encoding="utf-8", level=DEBUG)
+
 
 def check_init():
-    if not os.path.exists("/var/monit"):
+    """Check if the init.sh script has been run"""
+    if not path.exists("/var/monit"):
         print("/var/monit not found \nPlease run init.sh")
-    if not os.path.exists("/var/log/monit"): 
+    if not path.exists("/var/log/monit"):
         print("/var/log/monit not found \nPlease run init.sh")
-    if not os.path.exists("/etc/monit/conf.d"):
+    if not path.exists("/etc/monit/conf.d"):
         print("/etc/monit/conf.d not found \nPlease run init.sh")
         return False
-    else:
-        return True
-        
+    return True
+
 
 if __name__ == "__main__":
     if not check_init():
-        exit()
+        sys.exit()
     parser = argparse.ArgumentParser()
-    parser.add_argument("command", help="Commande à executer", choices=["check", "list", "get"])
-    parser.add_argument("parameter", help="Le paramètre de la commande", nargs='*', default='')
+    parser.add_argument(
+        "command", help="Commande à executer", choices=["check", "list", "get"]
+    )
+    parser.add_argument(
+        "parameter", help="Le paramètre de la commande", nargs="*", default=""
+    )
     args = parser.parse_args()
     log_config()
 
