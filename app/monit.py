@@ -19,7 +19,7 @@ def check_cpu_usage():
     """Check the cpu usage"""
     usage = psutil.cpu_percent(1)
     print(f"CPU Usage: {usage}%")
-    if 50 < usage < 80:
+    if 50.0 < usage < 80.0:
         discord_alerts.cpu_alert(usage)
     return usage
 
@@ -28,7 +28,7 @@ def check_ram_usage():
     """Check the ram usage"""
     usage = psutil.virtual_memory().percent
     print(f"RAM Usage: {usage}%")
-    if 50 < usage < 80:
+    if 50.0 < usage < 80.0:
         discord_alerts.ram_alert(usage)
     return usage
 
@@ -47,7 +47,7 @@ def check_disk_usage():
     """Check the disk usage"""
     usage = psutil.disk_usage("/")[3]
     print(f"Disk Usage: {usage}%")
-    if 10 < usage < 80:
+    if 10.0 < usage < 80.0:
         discord_alerts.disk_alert(usage)
     return usage
 
