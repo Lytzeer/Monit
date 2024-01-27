@@ -16,7 +16,7 @@ path:
       tags:
         - Reports
       responses:
-        '200':
+        200:
           description: OK
           schema:
             type: object
@@ -37,7 +37,7 @@ path:
           required: true
           type: string
       responses:
-        '200':
+        200:
           description: OK
           schema:
             type: object
@@ -46,7 +46,7 @@ path:
       summary: Get last report
       description: Get last report
       responses:
-        '200':
+        200:
           description: OK
           schema:
             type: object
@@ -61,7 +61,7 @@ path:
           required: true
           type: integer
       responses:
-        '200':
+        200:
           description: OK
           schema:
             type: object
