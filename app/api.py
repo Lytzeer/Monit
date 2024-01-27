@@ -7,7 +7,7 @@ from swagger_ui import api_doc
 
 
 app = Flask(__name__)
-api_doc(app, config_path="./swagger.yml", url_prefix="/api")
+api_doc(app, config_path="conf/swagger.yml", url_prefix="/api")
 
 
 @app.route("/", methods=["GET"])
