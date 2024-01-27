@@ -4,6 +4,18 @@
 
 C'est une application de monitoring qui permet de surveiller certaines données de votre machine linux.
 
+## Fonctionnalités
+
+Voici une liste des fonctionnalité presente dans l'application :
+
+- Check le pourcentage d'utilisation du CPU et de la RAM
+- Check le pourcentage de stockage utilisé sur le disque
+- Check si une liste de ports est ouvert
+- Création de rapport à la fin de chaque check
+- Redémarrage automatique toutes les 10 minutes
+- Alertes Discord en cas d'un pourcentage trop élevé
+- API pour visualiser tout les rapports
+
 ## Prérequis
 
 Avoir une machine avec une distribution linux basée sur Red Hat et avoir git installé sur votre machine.
