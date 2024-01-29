@@ -1,11 +1,11 @@
 {
     "cpu":{
-        "webhook":"https://discord.com/api/webhooks/1200478655843926097/xh60ncaoXRPogcV7MT4IEZyXdjw6v0XzP-5NRUyfDECrkXxOaqqipGraFin2Za_k5mY3"
+        "webhook":""
     },
     "ram":{
-        "webhook":"https://discord.com/api/webhooks/1200473547311689959/krUqZDqRh-4WrZnquS1vsOfiUtpdxyTAVOLv1YwU5f48bRo7fr8cWdvtNk0q48ljW6HB"
+        "webhook":""
     },
     "disk":{
-        "webhook":"https://discord.com/api/webhooks/1200478779361996961/pBU1omzOh46TiODgVu9zdddgU0yRw_coZmHJxIhYuDuY3S4opxIC0loPCTF_GEUcjIM3"
+        "webhook":""
     }
 }
