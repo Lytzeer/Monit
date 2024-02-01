@@ -19,7 +19,7 @@ def check_cpu_usage():
     """Check the cpu usage"""
     usage = psutil.cpu_percent(1)
     print(f"CPU Usage: {usage}%")
-    if 50.0 < str(usage) < 80.0:
+    if 50.0 < usage < 80.0:
         discord_alerts.cpu_alert(str(usage))
     elif usage > 80.0:
         discord_alerts.cpu_alert_critical(str(usage))
