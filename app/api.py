@@ -3,17 +3,15 @@
 from json import load
 from flask import Flask, jsonify, redirect
 from monit import get_report, get_all_reports, get_avg_of_report, get_last_rapport
-from swagger_ui import api_doc
 
 
 app = Flask(__name__)
-api_doc(app, config_path="conf/swagger.yml", url_prefix="/api")
 
 
 @app.route("/", methods=["GET"])
 def index():
     """Index route"""
-    return redirect("/api", code=302)
+    return redirect("/reports", code=302)
 
 
 @app.route("/reports", methods=["GET"])

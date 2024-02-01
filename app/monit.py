@@ -151,10 +151,11 @@ def get_rapports_younger_than(hours):
     """Get all reports younger than x hours"""
     rep = []
     for file in listdir("/var/monit/"):
-        if time.time() - path.getmtime(
-            f"/var/monit/{file}"
-        ) < hours * 60 * 60 and file.endswith(".json"):
-            rep.append(file)
+        if not file.endswith(".json"):
+            if time.time() - path.getmtime(
+                f"/var/monit/{file}"
+            ) < hours * 60 * 60 and file.endswith(".json"):
+                rep.append(file)
     return rep
 
 

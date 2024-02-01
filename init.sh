@@ -19,4 +19,3 @@ systemctl daemon-reload
 systemctl start monit.service
 systemctl enable monit.timer
 systemctl start monit.timer
-python3 /var/monit/api.py
