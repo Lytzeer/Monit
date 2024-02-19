@@ -12,7 +12,7 @@ Voici une liste des fonctionnalité presente dans l'application :
 - Check le pourcentage de stockage utilisé sur le disque
 - Check si une liste de ports est ouvert
 - Création de rapport à la fin de chaque check
-- Redémarrage automatique toutes les 10 minutes
+- Rapport automatique toutes les 10 minutes
 - Alertes Discord en cas d'un pourcentage trop élevé
 - API pour visualiser tout les rapports
 
